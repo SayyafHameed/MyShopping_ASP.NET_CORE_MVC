@@ -1,0 +1,301 @@
+﻿@model ShoppingCartVM
+@using Microsoft.Extensions.Options
+@inject IOptions<MyShopping.Utility.StripeData> Stripe
+
+<!-- BREADCRUMB -->
+<form method="post">
+    <div id="breadcrumb" class="section">
+        <!-- container -->
+        <div class="container">
+            <!-- row -->
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="breadcrumb-header">Checkout</h3>
+                    <ul class="breadcrumb-tree">
+                        <li><a asp-action="Index">Home</a></li>
+                        <li class="active">Checkout</li>
+                    </ul>
+                </div>
+            </div>
+            <!-- /row -->
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- /BREADCRUMB -->
+    <!-- SECTION -->
+    <div class="section">
+        <!-- container -->
+        <div class="container">
+            <!-- row -->
+            <div class="row">
+
+                <div class="col-md-7">
+                    <!-- Billing Details -->
+                    <div class="billing-details">
+                        <div class="section-title">
+                            <h3 class="title">Billing address</h3>
+                        </div>
+                        <div class="form-group">
+                            <input asp-for="OrderHeader.Name" class="form-control" type="text" name="first-name" placeholder="First Name">
+                            <span asp-validation-for="OrderHeader.Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input asp-for="OrderHeader.PhoneNumber" class="form-control" type="text" name="phonenum" placeholder="Phone Number">
+                            <span asp-validation-for="OrderHeader.PhoneNumber" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input asp-for="OrderHeader.Address" class="form-control" type="text" name="address" placeholder="Address">
+                            <span asp-validation-for="OrderHeader.Address" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input asp-for="OrderHeader.City" class="form-control" type="text" name="city" placeholder="City">
+                            <span asp-validation-for="OrderHeader.City" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-checkbox">
+                                <input type="checkbox" id="create-account">
+                                <label for="create-account">
+                                    <span></span>
+                                    Create Account?
+                                </label>
+                                <div class="caption">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.</p>
+                                    <input class="input" type="password" name="password" placeholder="Enter Your Password">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Billing Details -->
+                    <!-- Shiping Details -->
+                    <div class="shiping-details">
+                        <div class="section-title">
+                            <h3 class="title">Shiping address</h3>
+                        </div>
+                        <div class="input-checkbox">
+                            <input type="checkbox" id="shiping-address">
+                            <label for="shiping-address">
+                                <span></span>
+                                Ship to a diffrent address?
+                            </label>
+                            <div class="caption">
+                                <div class="form-group">
+                                    <input class="input" type="text" name="first-name" placeholder="First Name">
+                                </div>
+                                <div class="form-group">
+                                    <input class="input" type="text" name="last-name" placeholder="Last Name">
+                                </div>
+                                <div class="form-group">
+                                    <input class="input" type="email" name="email" placeholder="Email">
+                                </div>
+                                <div class="form-group">
+                                    <input class="input" type="text" name="address" placeholder="Address">
+                                </div>
+                                <div class="form-group">
+                                    <input class="input" type="text" name="city" placeholder="City">
+                                </div>
+                                <div class="form-group">
+                                    <input class="input" type="text" name="country" placeholder="Country">
+                                </div>
+                                <div class="form-group">
+                                    <input class="input" type="text" name="zip-code" placeholder="ZIP Code">
+                                </div>
+                                <div class="form-group">
+                                    <input class="input" type="tel" name="tel" placeholder="Telephone">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Shiping Details -->
+                    <!-- Order notes -->
+                    <div class="order-notes">
+                        <textarea class="input" placeholder="Order Notes"></textarea>
+                    </div>
+                    <!-- /Order notes -->
+                </div>
+
+                <!-- Order Details -->
+                <div class="col-md-5 order-details">
+                    
+                        <div class="section-title text-center">
+                            <h3 class="title">Your Order</h3>
+                        </div>
+                        <div class="order-summary">
+                            <div class="order-col">
+                                <div><strong>PRODUCT</strong></div>
+                                <div><strong>TOTAL</strong></div>
+                            </div>
+                            <div class="order-products">
+                            @foreach (var details in Model.shoppingCarts)
+                            {
+                                <div class="order-col">
+                                    <div>@details.Product.Price.ToString("c") x @details.Product.Name</div>
+                                    <div>@(Model.TotalCarts.ToString("c"))</div>
+                                </div>
+                            }
+                            </div>
+                            <div class="order-col">
+                                <div>Shiping</div>
+                                <div><strong>FREE</strong></div>
+                            </div>
+                            <div class="order-col">
+                                <div><strong>TOTAL</strong></div>
+                                <div><strong class="order-total">@Model.TotalCarts.ToString("c")</strong></div>
+                            </div>
+                        </div>
+                        
+                        <div class="payment-method">
+                            <div class="input-radio">
+                                <input type="radio" name="payment" id="payment-1">
+                                <label for="payment-1">
+                                    <span></span>
+                                    Direct Bank Transfer
+                                </label>
+                                <div class="caption">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                </div>
+                            </div>
+                            <div class="input-radio">
+                                <input type="radio" name="payment" id="payment-2">
+                                <label for="payment-2">
+                                    <span></span>
+                                    Cheque Payment
+                                </label>
+                                <div class="caption">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                </div>
+                            </div>
+                            <div class="input-radio">
+                                <input type="radio" name="payment" id="payment-3">
+                                <label for="payment-3">
+                                    <span></span>
+                                    Paypal System
+                                </label>
+                                <div class="caption">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-checkbox">
+                            <input type="checkbox" id="terms">
+                            <label for="terms">
+                                <span></span>
+                                I've read and accept the <a href="#">terms & conditions</a>
+                            </label>
+                        </div>
+                        <div class="col-1 w-100">
+                            <button type="submit" value="Place Order" class="primary-btn order-submit">Place order</button>
+                        </div>
+                    
+                </div>
+                <!-- /Order Details -->
+            </div>
+            <!-- /row -->
+        </div>
+        <!-- /container -->
+    </div>
+</form>
+<!-- /SECTION -->
+@* <form method="post">
+    <br />
+    <div class="container">
+        <div class="card shadow border-0">
+
+            <div class="card-header bg-secondary bg-gradient text-light ml-0 py-4">
+                <div class="row px-4">
+                    <div class="col-6">
+                        <h5 class="pt-2 text-white">
+                            Order Summary
+                        </h5>
+                    </div>
+                    <div class="col-6 text-end">
+                        <a asp-action="Index" class="btn btn-outline-danger btn-sm">Back to Cart</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="container rounded p-2">
+                    <div class="row">
+                        <div class="col-12 col-lg-6 pb-4">
+                            <div class="row">
+                                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                    <span class="text-info">Shipping Details:</span>
+                                </h4>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">
+                                    <label>Name</label>
+                                </div>
+                                <div class="col-9">
+                                    <input asp-for="OrderHeader.Name" class="form-control" />
+                                    <span asp-validation-for="OrderHeader.Name" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">
+                                    <label>Phone</label>
+                                </div>
+                                <div class="col-9">
+                                    <input asp-for="OrderHeader.PhoneNumber" class="form-control" />
+                                    <span asp-validation-for="OrderHeader.PhoneNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">
+                                    <label>Address</label>
+                                </div>
+                                <div class="col-9">
+                                    <input asp-for="OrderHeader.Address" class="form-control" />
+                                    <span asp-validation-for="OrderHeader.Address" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">
+                                    <label>City</label>
+                                </div>
+                                <div class="col-9">
+                                    <input asp-for="OrderHeader.City" class="form-control" />
+                                    <span asp-validation-for="OrderHeader.City" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-5 offset-lg-1">
+                            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="text-info">Order Summary:</span>
+                            </h4>
+                            <ul class="list-group mb-3">
+                                @foreach (var details in Model.shoppingCarts)
+                                {
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <div>
+                                            <h6 class="my-0">@details.Product.Name</h6>
+                                            <small class="text-muted">Quantity: @details.Count</small>
+                                        </div>
+                                        <span class="text-muted">@(Model.TotalCarts.ToString("c")) </span>
+                                    </li>
+                                }
+
+                                <li class="list-group-item d-flex justify-content-between bg-light">
+                                    <small class="text-info">Total (USD)</small>
+                                    <strong class="text-info">@Model.TotalCarts.ToString("c")</strong>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-12 col-md-8 pt-2">
+                        <p style="color:maroon; font-size:14px;">
+                            Estimate Arrival Date:
+                            @DateTime.Now.AddDays(7).ToShortDateString() - @DateTime.Now.AddDays(14).ToShortDateString()
+                        </p>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <button type="submit" value="Place Order" class="btn btn-primary form-control">Place Order</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form> *@

@@ -1,0 +1,28 @@
+﻿@model IEnumerable<Product>
+
+@{
+    ViewBag.PageTitle = "Order Management";
+    ViewBag.CardTitle = "Views Orders";
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+
+<br />
+
+<table id="myTable" class="table table-bordered table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>PhoneNumber</th>
+            <th>Email</th>
+            <th>OrderStatus</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+</table>
+
+
+@section Scripts {
+    <script src="~/js/order.js"></script>
+}
